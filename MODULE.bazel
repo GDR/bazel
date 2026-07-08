@@ -56,3 +56,11 @@ http_archive(
     integrity = "sha256-6VC5U4OFj2Q9hQiOjusmvA7zLzybN6ZbXEmas6bFGXA=",
     build_file = "//third_party:stringzilla.BUILD",
 )
+
+# --- Compile commands for clangd (dev only) ---
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "1f9360db1834d115c48279d38a97f30d64d3fd4a",
+    remote = "https://github.com/helly25/bazel-compile-commands-extractor.git",
+)
