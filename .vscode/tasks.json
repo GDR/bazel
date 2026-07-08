@@ -2,43 +2,60 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "bazel build cpp debug",
+            "label": "bazel-build-dbg-cpp-hello",
             "type": "shell",
-            "command": "bazelisk",
-            "args": [
-                "build",
-                "-c",
-                "dbg",
-                "//src:hello"
-            ],
+            "command": "bash tools/debug-build.sh //src:hello",
             "group": "build",
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": ["$gcc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
         {
-            "label": "bazel build rust debug",
+            "label": "bazel-build-dbg-rust-hello",
             "type": "shell",
-            "command": "bazelisk",
-            "args": [
-                "build",
-                "-c",
-                "dbg",
-                "//src/main/rust:hello_rust"
-            ],
+            "command": "bash tools/debug-build.sh //src/main/rust:hello_rust",
             "group": "build",
-            "problemMatcher": ["$rustc"]
+            "problemMatcher": ["$rustc"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
         },
         {
-            "label": "bazel build go debug",
+            "label": "bazel-build-dbg-go-hello",
             "type": "shell",
-            "command": "bazelisk",
-            "args": [
-                "build",
-                "-c",
-                "dbg",
-                "//src/main/go:hello_go"
-            ],
+            "command": "bash tools/debug-build.sh //src/main/go:hello_go",
             "group": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "bazel-build-dbg-pick",
+            "type": "shell",
+            "command": "bash tools/debug-build.sh ${input:bazelTarget}",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "bazelTarget",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "bazel query 'kind(cc_binary, //...) union kind(rust_binary, //...)' 2>/dev/null",
+                "description": "Select Bazel target to debug",
+                "useFirstResult": false
+            }
         }
     ]
 }

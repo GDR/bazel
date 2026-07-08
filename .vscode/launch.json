@@ -5,29 +5,43 @@
             "name": "Debug C++ (hello)",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/src/hello",
-            "args": [],
+            "program": "${workspaceFolder}/.debug/hello",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "bazel build cpp debug"
+            "preLaunchTask": "bazel-build-dbg-cpp-hello",
+            "initCommands": [
+                "command source ${workspaceFolder}/.debug/source-map.lldb"
+            ]
         },
         {
             "name": "Debug Rust (hello_rust)",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/src/main/rust/hello_rust",
-            "args": [],
+            "program": "${workspaceFolder}/.debug/hello_rust",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "bazel build rust debug"
+            "preLaunchTask": "bazel-build-dbg-rust-hello",
+            "initCommands": [
+                "command source ${workspaceFolder}/.debug/source-map.lldb"
+            ]
+        },
+        {
+            "name": "Debug Bazel Target (pick)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/.debug/current",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "bazel-build-dbg-pick",
+            "initCommands": [
+                "command source ${workspaceFolder}/.debug/source-map.lldb"
+            ]
         },
         {
             "name": "Debug Go (hello_go)",
             "type": "go",
             "request": "launch",
             "mode": "exec",
-            "program": "${workspaceFolder}/bazel-bin/src/main/go/hello_go",
-            "args": [],
+            "program": "${workspaceFolder}/.debug/hello_go",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "bazel build go debug"
+            "preLaunchTask": "bazel-build-dbg-go-hello"
         }
     ]
 }

@@ -5,4 +5,6 @@
 /sysroot/linux-x86_64/
 /kls-classpath
 /sysroot/openjdk21
+/.debug/
+
 
