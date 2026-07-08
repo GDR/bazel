@@ -5,6 +5,10 @@ try-import %workspace%/.bazelrc.user
 build --java_runtime_version=local_jdk
 build --tool_java_runtime_version=local_jdk
 
+# Compile Go targets in pure mode (disables cgo dependency on host shell tools)
+build --@rules_go//go/config:pure
+
+
 # --- Standard Compiler Rules ---
 build --cxxopt=-std=c++23
 build --host_cxxopt=-std=c++23
