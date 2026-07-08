@@ -23,6 +23,8 @@
             zlib
             llvmPackages.lld
             nixd
+            go
+            gopls
           ];
 
           shellHook = ''
