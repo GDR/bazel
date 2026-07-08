@@ -10,6 +10,8 @@ bazel_dep(name = "boost.algorithm", version = "1.83.0.bcr.1")
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "abseil-cpp", version = "20250814.1")
 bazel_dep(name = "rules_java", version = "9.6.1")
+bazel_dep(name = "rules_kotlin", version = "2.4.0")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
 
 # NixOS shebang compatibility patch
 single_version_override(
@@ -65,3 +67,14 @@ git_override(
     commit = "1f9360db1834d115c48279d38a97f30d64d3fd4a",
     remote = "https://github.com/helly25/bazel-compile-commands-extractor.git",
 )
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "io.ktor:ktor-server-core-jvm:2.3.12",
+        "io.ktor:ktor-server-netty-jvm:2.3.12",
+        "io.ktor:ktor-server-host-common-jvm:2.3.12",
+        "org.slf4j:slf4j-simple:2.0.13",
+    ],
+)
+use_repo(maven, "maven")
