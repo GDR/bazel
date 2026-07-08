@@ -16,6 +16,9 @@ int main() {
 
     // Abseil usage
     std::cout << absl::StrCat("Abseil joined: [", message, "]") << std::endl;
-
+    int a = 5;
+    int b = 0;
+    int c = a / b;
+    std::cout << c << std::endl;
     return 0;
 }
