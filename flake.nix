@@ -22,6 +22,7 @@
             python3
             zlib
             llvmPackages.lld
+            nixd
           ];
 
           shellHook = ''
@@ -34,8 +35,12 @@
               ./sysroot/generate.sh
             fi
 
+            # Export JAVA_HOME pointing to openjdk25
+            export JAVA_HOME=${pkgs.openjdk25}/lib/openjdk
+
             # Dynamically symlink kls-classpath to scripts/kls-classpath
             ln -sf scripts/kls-classpath kls-classpath
+
 
             # Set BAZEL_SH for Bazel target execution on NixOS
             export BAZEL_SH=${pkgs.bash}/bin/bash
