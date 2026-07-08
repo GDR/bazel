@@ -1,0 +1,13 @@
+CompileFlags:
+  Remove:
+    - -cxx-isystem
+    - -cxx-isystem=*
+    - -isystem
+    - sysroot/linux-x86_64/usr/include
+  Add:
+    - -isystem
+    - external/toolchains_llvm++llvm+llvm_toolchain_llvm/include/c++/v1
+    - -isystem
+    - external/toolchains_llvm++llvm+llvm_toolchain_llvm/include/x86_64-unknown-linux-gnu/c++/v1
+    - -isystem
+    - sysroot/linux-x86_64/usr/include

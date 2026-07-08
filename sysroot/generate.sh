@@ -45,4 +45,13 @@ chmod -R u+w sysroot/linux-x86_64/
 # Rewrite absolute glibc paths in linker scripts to be relative to the sysroot
 find sysroot/linux-x86_64/usr/lib -type f -name "*.so" -exec sed -i -E 's|/nix/store/[a-z0-9]+-glibc-[^/]*/lib/|/usr/lib/|g' {} +
 
+# Write BUILD.bazel file inside the generated sysroot
+cat << 'EOF' > sysroot/linux-x86_64/BUILD.bazel
+filegroup(
+    name = "sysroot",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+EOF
+
 echo "Sysroot generated successfully in sysroot/linux-x86_64/"
