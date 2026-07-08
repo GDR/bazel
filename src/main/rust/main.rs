@@ -1,3 +1,10 @@
+
+fn sum(a: i32, b: i32) -> i32 {
+    a + b
+}
+
 fn main() {
-    println!("Hello from hermetic Rust in Bazel 9 & Nix!");
+    let result = sum(1, 2);
+    let a = 2;
+    println!("{}", result + a);
 }

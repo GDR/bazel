@@ -53,7 +53,15 @@
             "mode": "exec",
             "program": "${workspaceFolder}/.debug/hello_go",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "bazel-build-dbg-go-hello"
+            "preLaunchTask": "bazel-build-dbg-go-hello",
+            "logOutput": "dap",
+            "trace": "verbose",
+            "substitutePath": [
+                {
+                    "from": "${workspaceFolder}/",
+                    "to": ""
+                }
+            ]
         }
     ]
 }

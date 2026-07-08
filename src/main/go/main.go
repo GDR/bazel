@@ -3,5 +3,7 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("Hello from hermetic Go in Bazel 9 & Nix!")
+	var a int = 2
+	var b int = 3
+	fmt.Println(a + b)
 }
