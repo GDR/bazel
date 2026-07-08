@@ -1,7 +1,6 @@
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 load("@rules_java//java:defs.bzl", "java_binary")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
+load("//tools:image.bzl", "jvm_image")
 
 kt_jvm_library(
     name = "main_lib",
@@ -22,26 +21,9 @@ java_binary(
     runtime_deps = [":main_lib"],
 )
 
-pkg_tar(
-    name = "main_tar",
-    srcs = [":main_deploy.jar"],
-    package_dir = "/app",
-)
-
-oci_image(
-    name = "main_image",
-    base = "@distroless_java",
-    tars = [":main_tar"],
-    entrypoint = [
-        "java",
-        "-jar",
-        "/app/main_deploy.jar",
-    ],
-)
-
-oci_load(
+jvm_image(
     name = "main_load",
-    image = ":main_image",
+    deploy_jar = ":main_deploy.jar",
     repo_tags = ["kotlin-main:latest"],
 )
 
