@@ -75,3 +75,43 @@ def jvm_image(name, deploy_jar, base = "@distroless_java", repo_tags = None):
         repo_tags = repo_tags or [name + ":latest"],
     )
 
+def quarkus_image(name, srcs, base = "@distroless_java", repo_tags = None):
+    """Builds a pkg_tar containing Quarkus application files, puts it in an oci_image, and sets up oci_load.
+
+    Args:
+      name: The name of the oci_load target.
+      srcs: The list of sources/files to package (e.g. pkg_files target).
+      base: The base Java image to build on top of.
+      repo_tags: The tags to assign to the loaded image.
+    """
+    tar_name = name + "_tar"
+    image_name = name + "_img"
+    
+    pkg_tar(
+        name = tar_name,
+        srcs = srcs,
+    )
+    
+    oci_image(
+        name = image_name,
+        base = base,
+        tars = [":" + tar_name],
+        env = {
+            "QUARKUS_APP": "/app",
+        },
+        entrypoint = [
+            "java",
+            "-Djava.util.logging.manager=org.jboss.logmanager.LogManager",
+            "-cp",
+            "/app/lib/boot/*:/app/lib/main/*",
+            "io.quarkus.bootstrap.runner.QuarkusEntryPoint",
+        ],
+    )
+    
+    oci_load(
+        name = name,
+        image = ":" + image_name,
+        repo_tags = repo_tags or [name + ":latest"],
+    )
+
+
