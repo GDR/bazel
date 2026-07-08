@@ -13,7 +13,11 @@ echo "==> Building ${TARGET} with debug symbols..."
 bazelisk build --config=dbg "${TARGET}"
 
 mkdir -p .debug
-cp -f "bazel-bin/${BIN_PATH}" ".debug/${BIN_NAME}"
+SRC_BIN="bazel-bin/${BIN_PATH}"
+if [ ! -f "${SRC_BIN}" ] && [ -f "bazel-bin/${BIN_PATH}_/${BIN_NAME}" ]; then
+    SRC_BIN="bazel-bin/${BIN_PATH}_/${BIN_NAME}"
+fi
+cp -f "${SRC_BIN}" ".debug/${BIN_NAME}"
 
 case "$(uname -s)" in
     Darwin)
@@ -40,6 +44,6 @@ fi
 # Write LLDB source-map command so launch.json doesn't need
 # a hardcoded execroot path.
 EXECROOT="$(bazelisk info execution_root 2>/dev/null)"
-echo "settings set target.source-map \"${EXECROOT}\" \"$(pwd)\"" > .debug/source-map.lldb
+echo "settings set target.source-map \"${EXECROOT}\" \"$(pwd)\" \"/proc/self/cwd\" \"$(pwd)\"" > .debug/source-map.lldb
 
 echo "==> Done: .debug/${BIN_NAME} (also .debug/current)"
