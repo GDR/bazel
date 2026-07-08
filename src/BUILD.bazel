@@ -1,0 +1,22 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
+
+cc_binary(
+    name = "hello",
+    srcs = ["main.cpp"],
+    deps = [
+        "@boost.algorithm",
+        "@stringzilla",
+        "@abseil-cpp//absl/strings",
+    ],
+)
+
+cc_test(
+    name = "hello_test",
+    srcs = ["main_test.cpp"],
+    deps = [
+        "@boost.algorithm",
+        "@stringzilla",
+        "@googletest//:gtest_main",
+        "@abseil-cpp//absl/strings",
+    ],
+)

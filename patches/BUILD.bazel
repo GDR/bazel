@@ -1,0 +1,2 @@
+# Expose patches to Bazel
+exports_files(["toolchains_llvm_bash.patch"])

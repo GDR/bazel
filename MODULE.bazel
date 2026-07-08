@@ -1,0 +1,50 @@
+module(
+    name = "bazel_project",
+    version = "1.0.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "toolchains_llvm", version = "1.8.0")
+bazel_dep(name = "boost.algorithm", version = "1.83.0.bcr.1")
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+bazel_dep(name = "abseil-cpp", version = "20250814.1")
+
+# NixOS shebang compatibility patch
+single_version_override(
+    module_name = "toolchains_llvm",
+    patch_strip = 1,
+    patches = ["//patches:toolchains_llvm_bash.patch"],
+    version = "1.8.0",
+)
+
+# Force googletest version with rules_cc compatibility patches
+single_version_override(
+    module_name = "googletest",
+    version = "1.17.0.bcr.2",
+)
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "20.1.0",
+)
+use_repo(llvm, "llvm_toolchain")
+register_toolchains("@llvm_toolchain//:all")
+
+# Register the in-tree Linux sysroot for C++ actions targeting Linux
+llvm.sysroot(
+    name = "llvm_toolchain",
+    label = "//sysroot/linux-x86_64:sysroot",
+    targets = ["linux-x86_64"],
+)
+
+# Define Stringzilla external repository using the built-in HTTP archive repo rule
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "stringzilla",
+    urls = ["https://github.com/ashvardanian/Stringzilla/archive/refs/tags/v4.6.2.tar.gz"],
+    strip_prefix = "StringZilla-4.6.2",
+    integrity = "sha256-6VC5U4OFj2Q9hQiOjusmvA7zLzybN6ZbXEmas6bFGXA=",
+    build_file = "//third_party:stringzilla.BUILD",
+)

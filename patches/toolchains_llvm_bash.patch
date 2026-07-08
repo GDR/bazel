@@ -1,0 +1,5 @@
+--- a/toolchain/cc_wrapper.sh.tpl
++++ b/toolchain/cc_wrapper.sh.tpl
+@@ -1 +1 @@
+-#!/bin/bash
++#!/usr/bin/env bash

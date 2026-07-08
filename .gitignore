@@ -1,0 +1,4 @@
+/bazel-*
+/.bazelrc.user
+/.direnv/
+/sysroot/libxml2_compat/
