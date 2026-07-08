@@ -1,6 +1,24 @@
 {
     "java.project.referencedLibraries": [
-        "bazel-bazel-9/external/**/*.jar"
+        "external/rules_jvm_external++maven+maven/**/*.jar",
+        "bazel-out/**/*.jar"
     ],
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "clangd.fallbackFlags": [
+        "-nostdinc++",
+        "-isystem",
+        "${workspaceFolder}/external/toolchains_llvm++llvm+llvm_toolchain_llvm/include/c++/v1",
+        "-isystem",
+        "${workspaceFolder}/external/toolchains_llvm++llvm+llvm_toolchain_llvm/include/x86_64-unknown-linux-gnu/c++/v1",
+        "-isystem",
+        "${workspaceFolder}/sysroot/linux-x86_64/usr/include",
+        "--sysroot=${workspaceFolder}/sysroot/linux-x86_64",
+        "-std=c++23"
+    ],
+    "clangd.arguments": [
+        "--query-driver=**",
+        "--compile-commands-dir=${workspaceFolder}"
+    ],
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+    "bazel.executable": "bazelisk"
 }
