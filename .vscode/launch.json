@@ -8,6 +8,7 @@
             "program": "${workspaceFolder}/.debug/hello",
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "bazel-build-dbg-cpp-hello",
+            "breakpointMode": "file",
             "sourceMap": {
                 "/proc/self/cwd": "${workspaceFolder}"
             },
@@ -22,6 +23,7 @@
             "program": "${workspaceFolder}/.debug/hello_rust",
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "bazel-build-dbg-rust-hello",
+            "breakpointMode": "file",
             "sourceMap": {
                 "/proc/self/cwd": "${workspaceFolder}"
             },
@@ -36,6 +38,7 @@
             "program": "${workspaceFolder}/.debug/current",
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "bazel-build-dbg-pick",
+            "breakpointMode": "file",
             "sourceMap": {
                 "/proc/self/cwd": "${workspaceFolder}"
             },
