@@ -43,6 +43,7 @@ quarkus_application(
         "@maven//:jakarta_ws_rs_jakarta_ws_rs_api",
         "@maven//:jakarta_enterprise_jakarta_enterprise_cdi_api",
         "@maven//:jakarta_inject_jakarta_inject_api",
+        "@maven//:org_jboss_logging_jboss_logging",
     ],
     runtime_extensions = [
         "@maven//:io_quarkus_quarkus_arc",
