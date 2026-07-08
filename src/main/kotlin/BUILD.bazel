@@ -1,9 +1,11 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+load("@rules_java//java:defs.bzl", "java_binary")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
 
-kt_jvm_binary(
-    name = "main",
+kt_jvm_library(
+    name = "main_lib",
     srcs = ["com/example/Hello.kt"],
-    main_class = "com.example.HelloKt",
     visibility = ["//visibility:public"],
     deps = [
         "@maven//:io_ktor_ktor_server_core_jvm",
@@ -12,3 +14,34 @@ kt_jvm_binary(
         "@maven//:org_slf4j_slf4j_simple",
     ],
 )
+
+java_binary(
+    name = "main",
+    main_class = "com.example.HelloKt",
+    visibility = ["//visibility:public"],
+    runtime_deps = [":main_lib"],
+)
+
+pkg_tar(
+    name = "main_tar",
+    srcs = [":main_deploy.jar"],
+    package_dir = "/app",
+)
+
+oci_image(
+    name = "main_image",
+    base = "@distroless_java",
+    tars = [":main_tar"],
+    entrypoint = [
+        "java",
+        "-jar",
+        "/app/main_deploy.jar",
+    ],
+)
+
+oci_load(
+    name = "main_load",
+    image = ":main_image",
+    repo_tags = ["kotlin-main:latest"],
+)
+

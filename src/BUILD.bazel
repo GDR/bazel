@@ -1,4 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
+load("//src:image.bzl", "cc_image")
 
 cc_binary(
     name = "hello",
@@ -20,3 +21,11 @@ cc_test(
         "@abseil-cpp//absl/strings",
     ],
 )
+
+cc_image(
+    name = "hello_load",
+    binary = ":hello",
+    repo_tags = ["hello:latest"],
+)
+
+

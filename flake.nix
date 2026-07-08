@@ -18,7 +18,10 @@
             llvmPackages.clang-tools
             git
             libxml2.out
-            openjdk
+            openjdk25
+            python3
+            zlib
+            llvmPackages.lld
           ];
 
           shellHook = ''
@@ -30,6 +33,9 @@
             if [ ! -d sysroot/linux-x86_64 ]; then
               ./sysroot/generate.sh
             fi
+
+            # Dynamically symlink kls-classpath to scripts/kls-classpath
+            ln -sf scripts/kls-classpath kls-classpath
 
             # Set BAZEL_SH for Bazel target execution on NixOS
             export BAZEL_SH=${pkgs.bash}/bin/bash
@@ -48,6 +54,8 @@
                 echo "build --config=linux"
                 echo "build --sandbox_add_mount_pair=${pkgs.bash}/bin/bash:/bin/bash"
                 echo "build:linux --action_env=LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat"
+                echo "build:linux --action_env=NIX_LDFLAGS"
+                echo "build:linux --action_env=NIX_CFLAGS_COMPILE"
                 echo "build --shell_executable=${pkgs.bash}/bin/bash"
               ''}
             } > .bazelrc.user

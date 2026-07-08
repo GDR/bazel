@@ -1,8 +1,92 @@
 load("@rules_java//java:defs.bzl", "java_binary")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
+load("@rules_quarkus//quarkus:defs.bzl", "quarkus_application")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
 java_binary(
     name = "main",
     srcs = ["com/example/Main.java"],
     main_class = "com.example.Main",
     visibility = ["//visibility:public"],
+)
+
+pkg_tar(
+    name = "main_tar",
+    srcs = [":main_deploy.jar"],
+    package_dir = "/app",
+)
+
+oci_image(
+    name = "main_image",
+    base = "@distroless_java",
+    tars = [":main_tar"],
+    entrypoint = [
+        "java",
+        "-jar",
+        "/app/main_deploy.jar",
+    ],
+)
+
+oci_load(
+    name = "main_load",
+    image = ":main_image",
+    repo_tags = ["java-main:latest"],
+)
+
+quarkus_application(
+    name = "quarkus_app",
+    srcs = ["com/example/QuarkusApp.java"],
+    resources = ["//src/main/resources:resources"],
+    main_class = "io.quarkus.runner.GeneratedMain",
+    deps = [
+        "@maven//:jakarta_ws_rs_jakarta_ws_rs_api",
+        "@maven//:jakarta_enterprise_jakarta_enterprise_cdi_api",
+        "@maven//:jakarta_inject_jakarta_inject_api",
+    ],
+    runtime_extensions = [
+        "@maven//:io_quarkus_quarkus_arc",
+        "@maven//:io_quarkus_quarkus_rest",
+        "@maven//:io_quarkus_quarkus_vertx_http",
+    ],
+    deployment_extensions = [
+        "@maven//:io_quarkus_quarkus_arc_deployment",
+        "@maven//:io_quarkus_quarkus_rest_deployment",
+        "@maven//:io_quarkus_quarkus_vertx_http_deployment",
+    ],
+)
+
+
+pkg_files(
+    name = "quarkus_jvm_files",
+    srcs = [":quarkus_app_augmented"],
+    prefix = "app",
+    strip_prefix = strip_prefix.from_pkg("quarkus_app_augmented-quarkus-app"),
+)
+
+pkg_tar(
+    name = "quarkus_jvm_tar",
+    srcs = [":quarkus_jvm_files"],
+)
+
+oci_image(
+    name = "quarkus_jvm_image",
+    base = "@distroless_java",
+    tars = [":quarkus_jvm_tar"],
+    env = {
+        "QUARKUS_APP": "/app",
+    },
+    entrypoint = [
+        "java",
+        "-Djava.util.logging.manager=org.jboss.logmanager.LogManager",
+        "-cp",
+        "/app/lib/boot/*:/app/lib/main/*",
+        "io.quarkus.bootstrap.runner.QuarkusEntryPoint",
+    ],
+)
+
+oci_load(
+    name = "quarkus_jvm_load",
+    image = ":quarkus_jvm_image",
+    repo_tags = ["quarkus-jvm:latest"],
 )

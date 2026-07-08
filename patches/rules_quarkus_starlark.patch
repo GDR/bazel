@@ -1,0 +1,11 @@
+--- quarkus/defs.bzl
++++ quarkus/defs.bzl
+@@ -7,5 +7,5 @@
+-load("//quarkus:quarkus.bzl", "quarkus_application", "quarkus_library")
++load("//quarkus:quarkus.bzl", _quarkus_application = "quarkus_application", _quarkus_library = "quarkus_library")
+ 
+ # Re-export main macros
+-quarkus_application = quarkus_application
+-quarkus_library = quarkus_library
++quarkus_application = _quarkus_application
++quarkus_library = _quarkus_library

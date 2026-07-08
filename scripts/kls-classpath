@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Find the Bazel execution root
+EXECROOT=$(bazelisk info execution_root 2>/dev/null)
+if [ -z "$EXECROOT" ]; then
+  # Fallback to workspace symlink path if bazel info is slow/failing
+  EXECROOT="$(cd "$(dirname "$0")/.." && pwd)/bazel-bazel-9"
+fi
+
+# Output absolute paths of all transitive JAR dependencies for all Java, Kotlin, and Quarkus targets in the workspace
+bazelisk cquery "kind(file, deps(kind('^(java|kt|quarkus)_', //...)))" --output=files 2>/dev/null | grep '\.jar$' | sed "s|^|$EXECROOT/|"

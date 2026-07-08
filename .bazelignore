@@ -1,0 +1,5 @@
+.direnv
+bazel-bazel-9
+bazel-bin
+bazel-out
+bazel-testlogs

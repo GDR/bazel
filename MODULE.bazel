@@ -75,6 +75,53 @@ maven.install(
         "io.ktor:ktor-server-netty-jvm:2.3.12",
         "io.ktor:ktor-server-host-common-jvm:2.3.12",
         "org.slf4j:slf4j-simple:2.0.13",
+        # Quarkus
+        "io.quarkus:quarkus-core:3.20.1",
+        "io.quarkus:quarkus-arc:3.20.1",
+        "io.quarkus:quarkus-arc-deployment:3.20.1",
+        "io.quarkus:quarkus-rest:3.20.1",
+        "io.quarkus:quarkus-rest-deployment:3.20.1",
+        "io.quarkus:quarkus-vertx-http:3.20.1",
+        "io.quarkus:quarkus-vertx-http-deployment:3.20.1",
+        "jakarta.ws.rs:jakarta.ws.rs-api:4.0.0",
+        "jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0",
+        "jakarta.inject:jakarta.inject-api:2.0.1",
     ],
 )
 use_repo(maven, "maven")
+
+# Container/OCI rules
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+bazel_dep(name = "rules_oci", version = "2.0.0")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_cc",
+    digest = "sha256:d703b626ba455c4e6c6fbe5f36e6f427c85d51445598d564652a2f334179f96e",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+    ],
+)
+oci.pull(
+    name = "distroless_java",
+    digest = "sha256:f34fd3e4e2d7a246d764d0614f5e6ffb3a735930723fac4cfc25a72798950262",
+    image = "gcr.io/distroless/java21-debian12",
+    platforms = [
+        "linux/amd64",
+    ],
+)
+use_repo(oci, "distroless_cc", "distroless_cc_linux_amd64", "distroless_java", "distroless_java_linux_amd64")
+
+# rules_quarkus setup
+bazel_dep(name = "rules_quarkus", version = "0.2.0")
+git_override(
+    module_name = "rules_quarkus",
+    remote = "https://github.com/kinhluan/rules_quarkus.git",
+    tag = "v0.2.0",
+    patches = ["//patches:rules_quarkus_starlark.patch"],
+    patch_strip = 0,
+)
+
+
+
