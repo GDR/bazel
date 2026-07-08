@@ -21,15 +21,15 @@ runCommand "linux-x86-64-sysroot" {} ''
   mkdir -p $out/lib
 
   # Copy glibc headers
-  cp -rL ${glibc.dev}/include/. $out/usr/include/
+  cp -rL ${pkgsCross.gnu64.glibc.dev}/include/. $out/usr/include/
   chmod -R u+w $out/usr/include
 
   # Copy linux kernel headers
-  cp -rL ${linuxHeaders}/include/. $out/usr/include/
+  cp -rL ${pkgsCross.gnu64.linuxHeaders}/include/. $out/usr/include/
   chmod -R u+w $out/usr/include
 
   # Copy glibc libraries (libc.so, libm.so, crt1.o, etc.)
-  cp -rL ${glibc}/lib/. $out/usr/lib/
+  cp -rL ${pkgsCross.gnu64.glibc}/lib/. $out/usr/lib/
   chmod -R u+w $out/usr/lib
 
 ''

@@ -25,6 +25,11 @@
             mkdir -p sysroot/libxml2_compat
             ln -sf ${pkgs.libxml2.out}/lib/libxml2.so sysroot/libxml2_compat/libxml2.so.2
 
+            # Generate the Linux x86-64 sysroot if not present
+            if [ ! -d sysroot/linux-x86_64 ]; then
+              ./sysroot/generate.sh
+            fi
+
             # Set BAZEL_SH for Bazel target execution on NixOS
             export BAZEL_SH=${pkgs.bash}/bin/bash
 

@@ -2,3 +2,4 @@
 /.bazelrc.user
 /.direnv/
 /sysroot/libxml2_compat/
+/sysroot/linux-x86_64/
