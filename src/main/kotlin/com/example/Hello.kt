@@ -14,6 +14,6 @@ fun main() {
                 call.respondText("Hello from hermetic Ktor in Bazel 9 & Nix!")
             }
         }
-    }.start(wait = false)
     println("Ktor server started on port 8080!")
+    }.start(wait = true)
 }
