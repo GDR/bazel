@@ -1,0 +1,18 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("//tools:image.bzl", "rust_image")
+
+rust_binary(
+    name = "hello_rust",
+    srcs = ["main.rs"],
+    edition = "2024",
+    visibility = ["//visibility:public"],
+)
+
+rust_image(
+    name = "hello_rust_load",
+    binary = ":hello_rust",
+    repo_tags = ["hello-rust:latest"],
+)
+
+
+

@@ -1,0 +1,40 @@
+bazel_dep(name = "rules_java", version = "9.6.1")
+bazel_dep(name = "rules_kotlin", version = "2.4.0")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+bazel_dep(name = "rules_quarkus", version = "0.2.0")
+
+# rules_quarkus setup
+git_override(
+    module_name = "rules_quarkus",
+    remote = "https://github.com/kinhluan/rules_quarkus.git",
+    tag = "v0.2.0",
+    patches = ["//patches:rules_quarkus_starlark.patch"],
+    patch_strip = 0,
+)
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "io.ktor:ktor-server-core-jvm:2.3.12",
+        "io.ktor:ktor-server-netty-jvm:2.3.12",
+        "io.ktor:ktor-server-host-common-jvm:2.3.12",
+        "org.slf4j:slf4j-simple:2.0.13",
+        # Quarkus
+        "io.quarkus:quarkus-core:3.20.1",
+        "io.quarkus:quarkus-arc:3.20.1",
+        "io.quarkus:quarkus-arc-deployment:3.20.1",
+        "io.quarkus:quarkus-rest:3.20.1",
+        "io.quarkus:quarkus-rest-deployment:3.20.1",
+        "io.quarkus:quarkus-vertx-http:3.20.1",
+        "io.quarkus:quarkus-vertx-http-deployment:3.20.1",
+        "jakarta.ws.rs:jakarta.ws.rs-api:4.0.0",
+        "jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0",
+        "jakarta.inject:jakarta.inject-api:2.0.1",
+    ],
+    excluded_artifacts = [
+        "io.grpc:protoc-gen-grpc-java",
+        "com.google.protobuf:protoc",
+    ],
+    fetch_sources = True,
+)
+use_repo(maven, "maven")

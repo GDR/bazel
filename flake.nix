@@ -25,6 +25,8 @@
             nixd
             go
             gopls
+            rustc
+            cargo
           ];
 
           shellHook = ''
@@ -44,6 +46,7 @@
             ln -sf scripts/kls-classpath kls-classpath
 
 
+
             # Set BAZEL_SH for Bazel target execution on NixOS
             export BAZEL_SH=${pkgs.bash}/bin/bash
 
@@ -59,11 +62,13 @@
               ''}
               ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
                 echo "build --config=linux"
-                echo "build --sandbox_add_mount_pair=${pkgs.bash}/bin/bash:/bin/bash"
                 echo "build:linux --action_env=LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat"
                 echo "build:linux --action_env=NIX_LDFLAGS"
                 echo "build:linux --action_env=NIX_CFLAGS_COMPILE"
+                echo "build:linux --action_env=PATH"
                 echo "build --shell_executable=${pkgs.bash}/bin/bash"
+                echo "build:linux --@rules_rust//rust/settings:extra_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
+                echo "build:linux --@rules_rust//rust/settings:extra_exec_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
               ''}
             } > .bazelrc.user
           '';

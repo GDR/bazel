@@ -1,0 +1,21 @@
+bazel_dep(name = "rules_pkg", version = "1.0.1")
+bazel_dep(name = "rules_oci", version = "2.0.0")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_cc",
+    digest = "sha256:d703b626ba455c4e6c6fbe5f36e6f427c85d51445598d564652a2f334179f96e",
+    image = "gcr.io/distroless/cc-debian12",
+    platforms = [
+        "linux/amd64",
+    ],
+)
+oci.pull(
+    name = "distroless_java",
+    digest = "sha256:f34fd3e4e2d7a246d764d0614f5e6ffb3a735930723fac4cfc25a72798950262",
+    image = "gcr.io/distroless/java21-debian12",
+    platforms = [
+        "linux/amd64",
+    ],
+)
+use_repo(oci, "distroless_cc", "distroless_cc_linux_amd64", "distroless_java", "distroless_java_linux_amd64")
