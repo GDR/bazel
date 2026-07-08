@@ -27,6 +27,8 @@
             gopls
             rustc
             cargo
+            delve
+            llvmPackages.lldb
           ];
 
           shellHook = ''

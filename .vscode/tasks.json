@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "bazel build cpp debug",
+            "type": "shell",
+            "command": "bazelisk",
+            "args": [
+                "build",
+                "-c",
+                "dbg",
+                "//src:hello"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "bazel build rust debug",
+            "type": "shell",
+            "command": "bazelisk",
+            "args": [
+                "build",
+                "-c",
+                "dbg",
+                "//src/main/rust:hello_rust"
+            ],
+            "group": "build",
+            "problemMatcher": ["$rustc"]
+        },
+        {
+            "label": "bazel build go debug",
+            "type": "shell",
+            "command": "bazelisk",
+            "args": [
+                "build",
+                "-c",
+                "dbg",
+                "//src/main/go:hello_go"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}

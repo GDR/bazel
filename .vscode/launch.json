@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C++ (hello)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/src/hello",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "bazel build cpp debug"
+        },
+        {
+            "name": "Debug Rust (hello_rust)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/src/main/rust/hello_rust",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "bazel build rust debug"
+        },
+        {
+            "name": "Debug Go (hello_go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "exec",
+            "program": "${workspaceFolder}/bazel-bin/src/main/go/hello_go",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "bazel build go debug"
+        }
+    ]
+}
