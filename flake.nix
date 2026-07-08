@@ -18,6 +18,7 @@
             llvmPackages.clang-tools
             git
             libxml2.out
+            openjdk
           ];
 
           shellHook = ''
