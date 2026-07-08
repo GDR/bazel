@@ -16,6 +16,8 @@ build:linux --sandbox_add_mount_pair=/nix/store
 # --- macOS Local Configurations ---
 build:macos --strategy=CppCompile=local
 build:macos --strategy=CppLink=local
+build:macos --cxxopt=-D_LIBCPP_NO_ABI_TAG
+build:macos --host_cxxopt=-D_LIBCPP_NO_ABI_TAG
 
 # --- Buildbarn / Remote Execution (RBE) Configuration ---
 # To build with Buildbarn: bazel build --config=remote <target>

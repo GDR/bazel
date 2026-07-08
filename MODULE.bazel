@@ -28,6 +28,14 @@ llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
     name = "llvm_toolchain",
     llvm_version = "20.1.0",
+    cxx_builtin_include_directories = {
+        "darwin-aarch64": [
+            "/nix/store",
+        ],
+        "darwin-x86_64": [
+            "/nix/store",
+        ],
+    },
 )
 use_repo(llvm, "llvm_toolchain")
 register_toolchains("@llvm_toolchain//:all")
