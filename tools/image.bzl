@@ -114,4 +114,39 @@ def quarkus_image(name, srcs, base = "@distroless_java", repo_tags = None):
         repo_tags = repo_tags or [name + ":latest"],
     )
 
+def go_image(name, binary, base = "@distroless_cc", repo_tags = None):
+    """Builds a pkg_tar containing the Go binary, puts it in an oci_image, and sets up oci_load.
+
+    Args:
+      name: The name of the oci_load target.
+      binary: The target label of the Go binary to package.
+      base: The base image to build on top of.
+      repo_tags: The tags to assign to the loaded image.
+    """
+    tar_name = name + "_tar"
+    image_name = name + "_img"
+    
+    pkg_tar(
+        name = tar_name,
+        srcs = [binary],
+        package_dir = "/app",
+    )
+    
+    # Extract binary name from label (e.g., ":hello_go" -> "hello_go")
+    binary_name = binary.split(":")[-1]
+    
+    oci_image(
+        name = image_name,
+        base = base,
+        tars = [":" + tar_name],
+        entrypoint = ["/app/" + binary_name],
+    )
+    
+    oci_load(
+        name = name,
+        image = ":" + image_name,
+        repo_tags = repo_tags or [name + ":latest"],
+    )
+
+
 
