@@ -4,7 +4,9 @@ load("//tools:image.bzl", "jvm_image")
 
 kt_jvm_library(
     name = "main_lib",
-    srcs = ["com/example/Hello.kt"],
+    srcs = ["src/com/example/Hello.kt"],
+    resources = glob(["resources/**/*"]),
+    resource_strip_prefix = "src/main/kotlin/resources",
     visibility = ["//visibility:public"],
     deps = [
         "@maven//:io_ktor_ktor_server_core_jvm",

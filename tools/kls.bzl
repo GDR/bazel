@@ -255,14 +255,14 @@ def main():
         dependencies.append(dep_data)
 
     source_roots = []
-    java_src = os.path.join(workspace_root, "src/main/java")
+    java_src = os.path.join(workspace_root, "src/main/java/src")
     if os.path.exists(java_src):
         source_roots.append({{
             "path": java_src,
             "type": "java-source"
         }})
 
-    kotlin_src = os.path.join(workspace_root, "src/main/kotlin")
+    kotlin_src = os.path.join(workspace_root, "src/main/kotlin/src")
     if os.path.exists(kotlin_src):
         source_roots.append({{
             "path": kotlin_src,

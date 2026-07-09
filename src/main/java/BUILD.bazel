@@ -1,11 +1,11 @@
-load("@rules_java//java:defs.bzl", "java_binary")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 load("@rules_quarkus//quarkus:defs.bzl", "quarkus_application")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("//tools:image.bzl", "jvm_image", "quarkus_image")
 
 java_binary(
     name = "main",
-    srcs = ["com/example/Main.java"],
+    srcs = ["src/com/example/Main.java"],
     main_class = "com.example.Main",
     visibility = ["//visibility:public"],
 )
@@ -16,10 +16,17 @@ jvm_image(
     repo_tags = ["java-main:latest"],
 )
 
+genrule(
+    name = "application_properties",
+    srcs = ["resources/application.properties"],
+    outs = ["application.properties"],
+    cmd = "cp $< $@",
+)
+
 quarkus_application(
     name = "quarkus_app",
-    srcs = ["com/example/QuarkusApp.java"],
-    resources = ["//src/main/resources:resources"],
+    srcs = ["src/com/example/QuarkusApp.java"],
+    resources = [":application_properties"],
     visibility = ["//visibility:public"],
     main_class = "io.quarkus.runner.GeneratedMain",
     deps = [
