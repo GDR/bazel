@@ -1,10 +1,11 @@
 /bazel-*
 /.bazelrc.user
 /.direnv/
-/sysroot/libxml2_compat/
-/sysroot/linux-x86_64/
+/tools/sysroot/libxml2_compat/
+/tools/sysroot/linux-x86_64/
 /kls-classpath
-/sysroot/openjdk21
+/tools/sysroot/openjdk21
 /.debug/
+/.ijwb/
 
 

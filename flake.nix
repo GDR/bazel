@@ -33,19 +33,25 @@
 
           shellHook = ''
             # Create a libxml2.so.2 symlink for LLVM ld.lld compatibility
-            mkdir -p sysroot/libxml2_compat
-            ln -sf ${pkgs.libxml2.out}/lib/libxml2.so sysroot/libxml2_compat/libxml2.so.2
+            mkdir -p tools/sysroot/libxml2_compat
+            ln -sf ${pkgs.libxml2.out}/lib/libxml2.so tools/sysroot/libxml2_compat/libxml2.so.2
 
             # Generate the Linux x86-64 sysroot if not present
-            if [ ! -d sysroot/linux-x86_64 ]; then
-              ./sysroot/generate.sh
+            if [ ! -d tools/sysroot/linux-x86_64 ]; then
+              ./tools/sysroot/generate.sh
             fi
 
             # Export JAVA_HOME pointing to openjdk25
-            export JAVA_HOME=${pkgs.openjdk25}/lib/openjdk
+            if [ -d "${pkgs.openjdk25}/Library/Java/JavaVirtualMachines" ]; then
+              export JAVA_HOME=$(find "${pkgs.openjdk25}" -name Home -type d | head -n 1)
+            elif [ -d "${pkgs.openjdk25}/lib/openjdk" ]; then
+              export JAVA_HOME=${pkgs.openjdk25}/lib/openjdk
+            else
+              export JAVA_HOME=${pkgs.openjdk25}
+            fi
 
-            # Dynamically symlink kls-classpath to scripts/kls-classpath
-            ln -sf scripts/kls-classpath kls-classpath
+            # Dynamically symlink kls-classpath to tools/kls-classpath
+            ln -sf tools/kls-classpath kls-classpath
 
 
 
@@ -64,13 +70,13 @@
               ''}
               ${pkgs.lib.optionalString pkgs.stdenv.isLinux ''
                 echo "build --config=linux"
-                echo "build:linux --action_env=LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat"
+                echo "build:linux --action_env=LD_LIBRARY_PATH=$PWD/tools/sysroot/libxml2_compat"
                 echo "build:linux --action_env=NIX_LDFLAGS"
                 echo "build:linux --action_env=NIX_CFLAGS_COMPILE"
                 echo "build:linux --action_env=PATH"
                 echo "build --shell_executable=${pkgs.bash}/bin/bash"
-                echo "build:linux --@rules_rust//rust/settings:extra_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
-                echo "build:linux --@rules_rust//rust/settings:extra_exec_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
+                echo "build:linux --@rules_rust//rust/settings:extra_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/tools/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
+                echo "build:linux --@rules_rust//rust/settings:extra_exec_rustc_env=PATH=$PATH,LD_LIBRARY_PATH=$PWD/tools/sysroot/libxml2_compat,LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib:${pkgs.stdenv.cc.cc}/lib/gcc/${pkgs.stdenv.hostPlatform.config}/${pkgs.stdenv.cc.cc.version}"
               ''}
             } > .bazelrc.user
           '';

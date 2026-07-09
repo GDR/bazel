@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Find workspace root
-cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.."
 
 # Check if Nix is installed
 if ! command -v nix-build &>/dev/null; then
@@ -37,16 +37,16 @@ NIX
 )
 
 # Copy store path to local directory
-rm -rf sysroot/linux-x86_64/usr sysroot/linux-x86_64/lib
-mkdir -p sysroot/linux-x86_64
-cp -rL "$STORE_PATH"/* sysroot/linux-x86_64/
-chmod -R u+w sysroot/linux-x86_64/
+rm -rf tools/sysroot/linux-x86_64/usr tools/sysroot/linux-x86_64/lib
+mkdir -p tools/sysroot/linux-x86_64
+cp -rL "$STORE_PATH"/* tools/sysroot/linux-x86_64/
+chmod -R u+w tools/sysroot/linux-x86_64/
 
 # Rewrite absolute glibc paths in linker scripts to be relative to the sysroot
-find sysroot/linux-x86_64/usr/lib -type f -name "*.so" -exec sed -i -E 's|/nix/store/[a-z0-9]+-glibc-[^/]*/lib/|/usr/lib/|g' {} +
+find tools/sysroot/linux-x86_64/usr/lib -type f -name "*.so" -exec sed -i -E 's|/nix/store/[a-z0-9]+-glibc-[^/]*/lib/|/usr/lib/|g' {} +
 
 # Write BUILD.bazel file inside the generated sysroot
-cat << 'EOF' > sysroot/linux-x86_64/BUILD.bazel
+cat << 'EOF' > tools/sysroot/linux-x86_64/BUILD.bazel
 filegroup(
     name = "sysroot",
     srcs = glob(["**"]),
@@ -54,4 +54,4 @@ filegroup(
 )
 EOF
 
-echo "Sysroot generated successfully in sysroot/linux-x86_64/"
+echo "Sysroot generated successfully in tools/sysroot/linux-x86_64/"
