@@ -20,6 +20,7 @@ quarkus_application(
     name = "quarkus_app",
     srcs = ["com/example/QuarkusApp.java"],
     resources = ["//src/main/resources:resources"],
+    visibility = ["//visibility:public"],
     main_class = "io.quarkus.runner.GeneratedMain",
     deps = [
         "@maven//:jakarta_ws_rs_jakarta_ws_rs_api",

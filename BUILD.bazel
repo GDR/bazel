@@ -33,3 +33,25 @@ refresh_compile_commands(
         "//src/...": "",
     },
 )
+
+load("//tools:kls.bzl", "kls_classpath", "kls_workspace")
+
+kls_classpath(
+    name = "kls_classpath",
+    targets = [
+        "//src/main/java:main",
+        "//src/main/java:quarkus_app",
+        "//src/main/kotlin:main",
+    ],
+)
+
+kls_workspace(
+    name = "generate_workspace_json",
+    targets = [
+        "//src/main/java:main",
+        "//src/main/java:quarkus_app",
+        "//src/main/kotlin:main",
+    ],
+)
+
+
