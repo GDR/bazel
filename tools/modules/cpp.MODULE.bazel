@@ -8,7 +8,7 @@ bazel_dep(name = "abseil-cpp", version = "20250814.1")
 single_version_override(
     module_name = "toolchains_llvm",
     patch_strip = 1,
-    patches = ["//patches:toolchains_llvm_bash.patch"],
+    patches = ["//tools/patches:toolchains_llvm_bash.patch"],
     version = "1.8.0",
 )
 
@@ -37,7 +37,7 @@ register_toolchains("@llvm_toolchain//:all")
 # Register the in-tree Linux sysroot for C++ actions targeting Linux
 llvm.sysroot(
     name = "llvm_toolchain",
-    label = "//sysroot/linux-x86_64:sysroot",
+    label = "//tools/sysroot/linux-x86_64:sysroot",
     targets = ["linux-x86_64"],
 )
 

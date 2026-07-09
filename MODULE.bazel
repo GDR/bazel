@@ -6,8 +6,8 @@ module(
 bazel_dep(name = "platforms", version = "1.0.0")
 
 # Include language and packaging definitions
-include("//modules:cpp.MODULE.bazel")
-include("//modules:jvm.MODULE.bazel")
-include("//modules:go.MODULE.bazel")
-include("//modules:rust.MODULE.bazel")
-include("//modules:oci.MODULE.bazel")
+include("//tools/modules:cpp.MODULE.bazel")
+include("//tools/modules:jvm.MODULE.bazel")
+include("//tools/modules:go.MODULE.bazel")
+include("//tools/modules:rust.MODULE.bazel")
+include("//tools/modules:oci.MODULE.bazel")

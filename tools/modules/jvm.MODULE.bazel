@@ -3,12 +3,16 @@ bazel_dep(name = "rules_kotlin", version = "2.4.0")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
 bazel_dep(name = "rules_quarkus", version = "0.2.0")
 
+# Expose compatibility_proxy repository to the main repository for IntelliJ Bazel plugin aspects
+rules_java_compat = use_extension("@rules_java//java:rules_java_deps.bzl", "compatibility_proxy")
+use_repo(rules_java_compat, "compatibility_proxy")
+
 # rules_quarkus setup
 git_override(
     module_name = "rules_quarkus",
     remote = "https://github.com/kinhluan/rules_quarkus.git",
     tag = "v0.2.0",
-    patches = ["//patches:rules_quarkus_starlark.patch"],
+    patches = ["//tools/patches:rules_quarkus_starlark.patch"],
     patch_strip = 0,
 )
 
